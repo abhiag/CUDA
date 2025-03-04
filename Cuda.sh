@@ -109,9 +109,17 @@ install_cuda() {
 
     log_message "📦 Installing CUDA..."
     sudo dpkg -i "/tmp/$DEB_FILE" || handle_error "Failed to install CUDA."
-    sudo cp "/tmp/$PIN_FILE" /etc/apt/preferences.d/cuda-repository-pin-600
-    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/3bf863cc.pub
-    sudo apt-get update
+
+    # Add the missing GPG key
+    log_message "🔑 Adding missing GPG key..."
+    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/3bf863cc.pub || handle_error "Failed to add GPG key."
+
+    # Update package lists
+    log_message "🔄 Updating package lists..."
+    sudo apt-get update || handle_error "Failed to update package lists."
+
+    # Install CUDA
+    log_message "📦 Installing CUDA package..."
     sudo apt-get install -y cuda || handle_error "Failed to install CUDA."
 
     log_message "✅ CUDA installed successfully."
