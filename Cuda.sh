@@ -135,6 +135,7 @@ check_nvidia_gpu
 setup_cuda_env
 install_cuda
 setup_cuda_env
+is_cuda_installed
 # Update and upgrade the system
 update_system
 
