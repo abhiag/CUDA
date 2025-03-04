@@ -127,19 +127,15 @@ install_cuda() {
 
 # Main script execution
 log_message "🚀 Starting system setup..."
-
 # Check and install essential packages
 install_essential_packages
-
-# Update and upgrade the system
-update_system
-
 # Check for NVIDIA GPU
 check_nvidia_gpu
-
 # Install CUDA if not already installed
 setup_cuda_env
 install_cuda
 setup_cuda_env
+# Update and upgrade the system
+update_system
 
 log_message "🎉 Cuda setup completed successfully!"
