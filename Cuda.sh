@@ -88,18 +88,18 @@ install_cuda() {
 
     if [[ -n "$WSL_DISTRO_NAME" ]]; then
         log_message "🖥️ Installing CUDA for WSL 2..."
-        # Define file names and URLs for WSL
         PIN_FILE="cuda-wsl-ubuntu.pin"
         PIN_URL="https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin"
         DEB_FILE="cuda-repo-wsl-ubuntu-12-8-local_12.8.0-1_amd64.deb"
         DEB_URL="https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-wsl-ubuntu-12-8-local_12.8.0-1_amd64.deb"
+        REPO_URL="https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/"
     else
         log_message "🖥️ Installing CUDA for Ubuntu..."
-        # Define file names and URLs for Ubuntu
         PIN_FILE="cuda-ubuntu2404.pin"
         PIN_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin"
         DEB_FILE="cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb"
         DEB_URL="https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb"
+        REPO_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/"
     fi
 
     # Download and install CUDA
@@ -110,9 +110,13 @@ install_cuda() {
     log_message "📦 Installing CUDA..."
     sudo dpkg -i "/tmp/$DEB_FILE" || handle_error "Failed to install CUDA."
 
-    # Add the missing GPG key
+    # Add missing GPG key securely
     log_message "🔑 Adding missing GPG key..."
-    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/3bf863cc.pub || handle_error "Failed to add GPG key."
+    sudo mkdir -p /etc/apt/keyrings
+    wget -O /etc/apt/keyrings/cuda-keyring.gpg "${REPO_URL}3bf863cc.pub" || handle_error "Failed to download GPG key."
+
+    # Configure CUDA repository with signed-by option
+    echo "deb [signed-by=/etc/apt/keyrings/cuda-keyring.gpg] file:/var/cuda-repo-ubuntu2404-12-8-local /" | sudo tee /etc/apt/sources.list.d/cuda.list
 
     # Update package lists
     log_message "🔄 Updating package lists..."
