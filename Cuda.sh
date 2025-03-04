@@ -130,6 +130,7 @@ log_message "🚀 Starting system setup..."
 # Check and install essential packages
 install_essential_packages
 # Check for NVIDIA GPU
+setup_cuda_env
 check_nvidia_gpu
 # Install CUDA if not already installed
 setup_cuda_env
