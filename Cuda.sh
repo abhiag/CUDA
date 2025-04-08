@@ -15,8 +15,7 @@ handle_error() {
 install_essential_packages() {
     log_message "🔍 Checking and installing essential packages..."
     local packages=(
-        "nvtop" "gnupg2" "gnupg1" "htop" "screen" "curl" "sudo" "wget" "fonts-noto" "fonts-noto-color-emoji"
-        "fonts-dejavu" "fonts-freefont-ttf" "fonts-ubuntu" "fonts-roboto" "fonts-liberation"
+        "gnupg2" "gnupg1" "htop" "screen" "curl" "sudo" "wget"
     )
 
     for pkg in "${packages[@]}"; do
